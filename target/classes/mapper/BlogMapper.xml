@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengdu.longblog.mapper.BlogMapper">
+
+    <resultMap id="resultBlogs" type="com.chengdu.longblog.entity.Blog">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="recommend" column="recommend"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="type" javaType="com.chengdu.longblog.entity.Type">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="blogResult" type="com.chengdu.longblog.entity.Blog">
+        <association property="user" javaType="com.chengdu.longblog.entity.User">
+            <id property="id" column="id"/>
+            <result property="username" column="username"/>
+        </association>
+    </resultMap>
+
+
+    <resultMap id="blogs" type="com.chengdu.longblog.entity.Blog">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="views" column="views"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="flag" column="flag"/>
+        <result property="appreciation" column="appreciation"/>
+        <result property="shareStatement" column="share_statement"/>
+        <result property="commentabled" column="commentabled"/>
+        <result property="published" column="published"/>
+        <result property="recommend" column="recommend"/>
+        <result property="delTag" column="del_tag"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="user" javaType="com.chengdu.longblog.entity.User">
+            <id property="id" column="user_id"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="nickname" column="nickname"/>
+            <result property="email" column="email"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateTime" column="update_time"/>
+        </association>
+        <association property="type" javaType="com.chengdu.longblog.entity.Type">
+            <id property="id" column="type_id"/>
+            <result property="name" column="name"/>
+            <result property="blogCount" column="blogCount"/>
+        </association>
+        <collection property="tags" ofType="com.chengdu.longblog.entity.Tag">
+            <result property="id" column="tag_id"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+    
+    
+    <select id="getBlogByTypeID" resultMap="resultBlogs" parameterType="com.baomidou.mybatisplus.extension.plugins.pagination.Page">
+        select * from t_blog tb
+        inner join t_type tt
+        on tb.type_id = tt.type_id
+        where tb.del_tag = 0
+    </select>
+
+    
+    <!-- 三个表连接查询 t_blog,t_user,t_type -->
+    <select id="getBlogs" resultMap="blogs" parameterType="com.baomidou.mybatisplus.extension.plugins.pagination.Page">
+        SELECT * FROM 
+        (t_blog tb INNER JOIN t_user tu ON tb.`user_id` = tu.user_id)
+        INNER JOIN t_type tp ON tp.`type_id` = tb.`type_id`
+        order by tb.`id` desc
+    </select>
+
+    <!-- 模糊查询 title 和 content-->
+    <select id="searchBlog" resultMap="blogs" >
+        SELECT * FROM
+            (t_blog tb INNER JOIN t_user tu ON tb.`user_id` = tu.user_id)
+                INNER JOIN t_type tp ON tp.`type_id` = tb.`type_id`
+        ${ew.customSqlSegment}
+    </select>
+    <!--order by tb.`id` desc-->
+
+    <select id="getBlog" resultMap="blogs">
+        select * from
+            (t_blog tb INNER JOIN t_user tu ON tb.`user_id` = tu.user_id)
+                INNER JOIN t_type tp ON tp.`type_id` = tb.`type_id`
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="getTagByBlog" resultMap="blogs">
+        SELECT * FROM
+            ((t_blog tb INNER JOIN t_user tu ON tb.`user_id` = tu.user_id)
+                INNER JOIN t_type tp ON tp.`type_id` = tb.`type_id`)
+                INNER JOIN t_tag tg ON tb.`tag_id` = tg.`tag_id`
+            ${ew.customSqlSegment}
+    </select>
+
+
+</mapper>

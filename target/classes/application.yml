@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 124578
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+
+logging:
+  level:
+    root: info
+    com.lrm: debug
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true #自动驼峰映射
+
+
+

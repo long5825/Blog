@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- 配置方便移动端访问 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.8">
+    <title>搜索结果页面</title>
+    <!-- cdn引用semantic -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/css/me.css">
+</head>
+<body>
+
+
+
+
+    <!-- 中间 -->
+    <div class="m-container-small m-padded-tb-big">
+        <div class="ui container">  <!-- 根据情况弄一个容器 -->
+
+            <!-- 最上方 -->
+            <div class="ui top attached segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <h3 class="ui teal header">搜索结果</h3>
+                    </div>
+                    <div class="right aligned column">
+                        共 <h3 class="ui orange header m-inline-block m-text-thin" th:text="${blogs.getRecords().size()}"></h3> 篇
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中间内容放博客 -->
+            <div class="ui attached segment">
+                <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${blogs.getRecords()}">
+                    <div class="ui middle aligned mobile reversed stackable grid">
+
+                        <!-- 博客的文本内容 -->
+                        <div class="eleven wide column">
+                            <h3 class="ui header" ><a href="#" class="m-block" th:text="${blog.getTitle()}">标题</a></h3>
+                            <p class="m-text" th:text="${blog.getContent()}">描述信息</p>
+                            <div class="ui grid">
+                                <div class="eleven wide column">
+                                    <div class="ui mini horizontal link list">
+                                        <!-- 头像，用户名 -->
+                                        <div class="item">
+                                            <img src="/images/img_1.png" th:src="${blog.getUser().getAvatar()}" class="ui avatar image" width="100px" height="100px">
+                                            <div class="content"><div class="header" th:text="${blog.getUser().getUsername()}">name</div></div>
+                                        </div>
+                                        <!-- 日期 -->
+                                        <div class="item">
+                                            <i class="calendar icon"></i><span th:text="${blog.getCreateTime()}">创建时间</span>
+                                        </div>
+                                        <div class="item" >
+                                            <i class="eye icon"></i> <span th:text="${blog.getViews()}">浏览次数</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 右边的认知升级按钮 -->
+                                <div class="right aligned five wide column">
+                                    <a href="#" target="_blank" class="ui teal basic label m-padded-mini" th:text="${blog.getType().getName()}">分类</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 博客的右侧图片 -->
+                        <div class="five wide column" >
+                            <a href="#" target="_blank">
+                                <img src="/images/img_1.png" th:src="${blog.getFirstPicture()}" class="ui rounded image">
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 尾部翻页键 -->
+            <div class="ui bottom attached segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <a th:href="${blogs.hasPrevious()}?@{/searchResult(current=${blogs.getCurrent()}-1,title=${title})}:@{/searchResult(current=1,title=${title})}" class="ui mini teal basic button">上一页</a>    <!-- teal:颜色  basic:中间空白 -->
+                    </div>
+                    <div class="right aligned column">
+                        <a th:href="${blogs.hasNext()}?@{/searchResult(current=${blogs.getCurrent()}+1,title=${title})}:@{/searchResult(current=1,title=${title})}" class="ui mini teal basic button">下一页</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!-- 底部footer -->
+    <footer class="ui inverted vertical segment m-padded-tb-massive">
+        <div class="ui center aligned container"> <!-- center aligned：居中 -->
+            <div class="ui inverted divided stackable grid">
+
+                <!-- 底部图片 -->
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <div class="item">
+                            <img src="/images/wechat.jpg" class="ui rounded image" style="width: 150px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">最新博客</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">用户</a>
+                        <a href="#" class="item">用户</a>
+                        <a href="#" class="item">用户</a>
+                    </div>
+                </div>
+
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">Emall: 2754091173@qq.com</a>
+                        <a href="#" class="item">QQ: 2754091173</a>
+                        <a href="#" class="item">用户</a>
+                    </div>
+                </div>
+
+                <div class="seven wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">最新博客</h4>
+                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客</p>
+                </div>
+            </div>
+
+            <!-- 分割线 -->
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-thin m-text-spaced m-opacity-tiny">家长监护
+                网络110报警服务
+                中国互联网举报中心
+                ©2022-2022 我的世界有限公司
+                版权与免责声明
+                版权申诉</p>
+        </div>
+    </footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+<script>
+    $('.menu.toggle').click(function (){
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+</script>
+
+</body>
+</html>
